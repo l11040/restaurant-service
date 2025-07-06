@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Restaurant } from '../../entities/restaurant.entity';
 import { ConfigService } from '@nestjs/config';
+import { RestaurantInfoDto } from './dto/auth-response.dto';
 
 @Injectable()
 export class RestaurantJwtStrategy extends PassportStrategy(
@@ -23,7 +24,10 @@ export class RestaurantJwtStrategy extends PassportStrategy(
     });
   }
 
-  async validate(payload: { sub: number; token: string }) {
+  async validate(payload: {
+    sub: number;
+    token: string;
+  }): Promise<RestaurantInfoDto> {
     const restaurant = await this.restaurantRepository.findOne({
       where: { id: payload.sub },
     });
