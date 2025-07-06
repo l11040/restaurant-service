@@ -23,13 +23,10 @@ import {
 } from './dto/auth-response.dto';
 import { RestaurantJwtAuthGuard } from './restaurant-jwt-auth.guard';
 import { LoginDto } from './dto';
+import { RestaurantInfoDto } from './dto/auth-response.dto';
 
-interface RequestWithUser extends Request {
-  user: {
-    id: number;
-    restaurantId: string;
-    name: string;
-  };
+export interface RequestWithUser extends Request {
+  user: RestaurantInfoDto;
 }
 
 @ApiTags('레스토랑 인증')
