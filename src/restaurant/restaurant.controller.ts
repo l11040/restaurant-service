@@ -6,13 +6,15 @@ import {
   UseGuards,
   Query,
   Req,
+  Body,
+  Param,
 } from '@nestjs/common';
-import { Request } from 'express';
 import { RestaurantJwtAuthGuard } from './auth/restaurant-jwt-auth.guard';
-import { ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiQuery, ApiBody, ApiParam } from '@nestjs/swagger';
 import { RestaurantService } from './restaurant.service';
-import { MenuListQuery } from './forms';
-import { RestaurantInfoDto } from './auth/dto/auth-response.dto';
+import { MenuListQuery, CreateMenuForm } from './forms';
+import { CreateMenuResultDto } from './dtos';
+import { RequestWithUser } from './auth/restaurant-auth.controller';
 
 @Controller('restaurant')
 @UseGuards(RestaurantJwtAuthGuard)
@@ -21,8 +23,13 @@ export class RestaurantController {
   constructor(private readonly restaurantService: RestaurantService) {}
 
   @Post('menu')
-  addMenu() {
-    return { message: '메뉴 추가 기능이 구현될 예정입니다.' };
+  @ApiBody({ type: CreateMenuForm })
+  async addMenu(
+    @Body() form: CreateMenuForm,
+    @Req() req: RequestWithUser,
+  ): Promise<CreateMenuResultDto> {
+    const restaurantId = req.user.id;
+    return this.restaurantService.createMenu(restaurantId, form);
   }
 
   @Get('menu')
@@ -33,10 +40,7 @@ export class RestaurantController {
   })
   @ApiQuery({ name: 'minPrice', required: false, description: '최소 가격' })
   @ApiQuery({ name: 'maxPrice', required: false, description: '최대 가격' })
-  async getMenu(
-    @Query() query: MenuListQuery,
-    @Req() req: Request & { user: RestaurantInfoDto },
-  ) {
+  async getMenu(@Query() query: MenuListQuery, @Req() req: RequestWithUser) {
     const restaurantId = req.user.id;
     return this.restaurantService.getMenus(restaurantId, query);
   }

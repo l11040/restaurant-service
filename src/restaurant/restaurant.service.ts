@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Menu } from 'src/entities/menu.entity';
 import { Repository } from 'typeorm';
-import { MenuListQuery } from './forms';
-import { MenuListItemDto } from './dtos';
+import { MenuListQuery, CreateMenuForm } from './forms';
+import { MenuListItemDto, CreateMenuResultDto } from './dtos';
 
 @Injectable()
 export class RestaurantService {
@@ -40,5 +40,25 @@ export class RestaurantService {
       createdAt: menu.createdAt,
       updatedAt: menu.updatedAt,
     }));
+  }
+
+  async createMenu(
+    restaurantId: number,
+    form: CreateMenuForm,
+  ): Promise<CreateMenuResultDto> {
+    const menu = this.menuRepository.create({
+      ...form,
+      restaurantId,
+    });
+    const saved = await this.menuRepository.save(menu);
+    return {
+      id: saved.id,
+      name: saved.name,
+      price: Number(saved.price),
+      category: saved.category,
+      description: saved.description,
+      createdAt: saved.createdAt,
+      updatedAt: saved.updatedAt,
+    };
   }
 }
