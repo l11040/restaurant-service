@@ -1,0 +1,18 @@
+version: '3'
+services:
+  mariadb:
+    image: mariadb:latest
+    restart: always
+    container_name: restaurant-service-db
+    environment:
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_CHARSET=utf8mb4
+      - TZ=Asia/Seoul
+    ports:
+      - '3312:3306'
+    volumes:
+      - ./data/mysql-data:/var/lib/mysql
+      - ./my.cnf:/etc/mysql/conf.d/my.cnf
