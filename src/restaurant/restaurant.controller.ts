@@ -10,12 +10,19 @@ import {
   Param,
 } from '@nestjs/common';
 import { RestaurantJwtAuthGuard } from './auth/restaurant-jwt-auth.guard';
-import { ApiBearerAuth, ApiQuery, ApiBody, ApiParam } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiQuery,
+  ApiBody,
+  ApiParam,
+  ApiTags,
+} from '@nestjs/swagger';
 import { RestaurantService } from './restaurant.service';
 import { MenuListQuery, CreateMenuForm } from './forms';
 import { CreateMenuResultDto } from './dtos';
 import { RequestWithUser } from './auth/restaurant-auth.controller';
 
+@ApiTags('레스토랑/메뉴')
 @Controller('restaurant')
 @UseGuards(RestaurantJwtAuthGuard)
 @ApiBearerAuth('access-token')
