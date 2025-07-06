@@ -61,4 +61,15 @@ export class RestaurantService {
       updatedAt: saved.updatedAt,
     };
   }
+
+  async deleteMenu(
+    restaurantId: number,
+    menuId: number,
+  ): Promise<{ deleted: boolean }> {
+    const result = await this.menuRepository.delete({
+      id: menuId,
+      restaurantId,
+    });
+    return { deleted: result.affected === 1 };
+  }
 }

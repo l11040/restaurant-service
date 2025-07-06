@@ -45,8 +45,13 @@ export class RestaurantController {
     return this.restaurantService.getMenus(restaurantId, query);
   }
 
-  @Delete('menu')
-  deleteMenu() {
-    return { message: '메뉴 삭제 기능이 구현될 예정입니다.' };
+  @Delete('menu/:menuId')
+  @ApiParam({ name: 'menuId', required: true, description: '삭제할 메뉴 id' })
+  async deleteMenu(
+    @Param('menuId') menuId: string,
+    @Req() req: RequestWithUser,
+  ) {
+    const restaurantId = req.user.id;
+    return this.restaurantService.deleteMenu(restaurantId, Number(menuId));
   }
 }
