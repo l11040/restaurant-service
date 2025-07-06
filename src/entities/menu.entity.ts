@@ -8,12 +8,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { Restaurant } from './restaurant.entity';
-
-export enum MenuCategory {
-  WESTERN = '양식',
-  JAPANESE = '일식',
-  CHINESE = '중식',
-}
+import { MenuCategory } from 'src/restaurant/enums';
 
 @Entity('menus')
 export class Menu {
